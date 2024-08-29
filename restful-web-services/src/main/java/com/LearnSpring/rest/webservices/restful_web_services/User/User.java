@@ -1,5 +1,6 @@
 package com.LearnSpring.rest.webservices.restful_web_services.User;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Size;
 
@@ -10,9 +11,11 @@ public class User {
     private Integer id;
 
     @Size(min=2, message = "Name Should Have Atleast 2 Characters") // Adding Validations
+    @JsonProperty("user_name") // This will help the api output to have the given string value for that name
     private String name;
 
-    @Past(message = "Birthday should be past") // Validations as part of Jakarta Validation Constraints
+    @Past(message = "Birthday should be past")// Validations as part of Jakarta Validation Constraints
+    @JsonProperty("Birth_Date")
     private LocalDate birthdate;
 
     public User(Integer id, String name, LocalDate birthdate) {

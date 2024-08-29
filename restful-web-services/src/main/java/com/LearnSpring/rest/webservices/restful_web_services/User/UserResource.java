@@ -1,14 +1,17 @@
 package com.LearnSpring.rest.webservices.restful_web_services.User;
 
 import jakarta.validation.Valid;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
-import java.nio.file.attribute.UserPrincipalNotFoundException;
 import java.util.List;
-import java.util.function.Predicate;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 
 @RestController
@@ -26,7 +29,7 @@ public class UserResource {
     }
 
     @GetMapping("/users/{id}")
-    public  User retreiveUserID(@PathVariable int id){
+    public EntityModel<User> retreiveUserID(@PathVariable int id){
 
 //        if(User==null)
 
@@ -35,7 +38,13 @@ public class UserResource {
         if(user==null)
             throw new  UserNotFoundException("id:"+id);
 
-        return user;
+        EntityModel<User> entityModel = EntityModel.of(user);
+
+        // Instead of hard coding to adapt to changing codes
+        WebMvcLinkBuilder link =  linkTo(methodOn(this.getClass()).retreiveAllUsers());
+        entityModel.add(link.withRel("all-users"));
+
+        return entityModel;
     }
 
     @PostMapping("/users")
