@@ -1,11 +1,18 @@
 package com.LearnSpring.rest.webservices.restful_web_services.User;
 
+import jakarta.validation.constraints.Past;
+import jakarta.validation.constraints.Size;
+
 import java.time.LocalDate;
 
 public class User {
 
     private Integer id;
+
+    @Size(min=2, message = "Name Should Have Atleast 2 Characters") // Adding Validations
     private String name;
+
+    @Past(message = "Birthday should be past") // Validations as part of Jakarta Validation Constraints
     private LocalDate birthdate;
 
     public User(Integer id, String name, LocalDate birthdate) {

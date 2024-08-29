@@ -1,5 +1,6 @@
 package com.LearnSpring.rest.webservices.restful_web_services.User;
 
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -7,6 +8,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 import java.nio.file.attribute.UserPrincipalNotFoundException;
 import java.util.List;
+import java.util.function.Predicate;
 
 
 @RestController
@@ -37,7 +39,7 @@ public class UserResource {
     }
 
     @PostMapping("/users")
-    public ResponseEntity<User> createUSer(@RequestBody User user){
+    public ResponseEntity<User> createUSer(@Valid @RequestBody User user){
         User savedUser = service.save(user);
 
         // users/4 => /users/{id},  user.getID
@@ -49,6 +51,11 @@ public class UserResource {
 
         return ResponseEntity.created(location).build();
 
+    }
+
+    @DeleteMapping("/users/{id}")
+    public void deleteUser(@PathVariable int id) {
+        service.deleteById(id);
     }
 
 
