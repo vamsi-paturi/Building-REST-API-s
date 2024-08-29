@@ -1,21 +1,27 @@
 package com.LearnSpring.rest.webservices.restful_web_services.User;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
 import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Size;
 
 import java.time.LocalDate;
 
+@Entity(name = "user_details")
 public class User {
 
+    @Id
+    @GeneratedValue
     private Integer id;
 
     @Size(min=2, message = "Name Should Have Atleast 2 Characters") // Adding Validations
-    @JsonProperty("user_name") // This will help the api output to have the given string value for that name
+    //@JsonProperty("user_name") // This will help the api output to have the given string value for that name
     private String name;
 
     @Past(message = "Birthday should be past")// Validations as part of Jakarta Validation Constraints
-    @JsonProperty("Birth_Date")
+    @JsonProperty("birth_date")
     private LocalDate birthdate;
 
     public User(Integer id, String name, LocalDate birthdate) {
