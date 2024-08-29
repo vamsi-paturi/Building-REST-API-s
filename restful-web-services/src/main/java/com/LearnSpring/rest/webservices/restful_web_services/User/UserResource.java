@@ -1,11 +1,12 @@
 package com.LearnSpring.rest.webservices.restful_web_services.User;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
+import java.nio.file.attribute.UserPrincipalNotFoundException;
 import java.util.List;
-import java.util.Objects;
 
 
 @RestController
@@ -24,7 +25,30 @@ public class UserResource {
 
     @GetMapping("/users/{id}")
     public  User retreiveUserID(@PathVariable int id){
-        return service.findUser(id);
+
+//        if(User==null)
+
+        User user = service.findUser(id);
+
+        if(user==null)
+            throw new  UserNotFoundException("id:"+id);
+
+        return user;
+    }
+
+    @PostMapping("/users")
+    public ResponseEntity<User> createUSer(@RequestBody User user){
+        User savedUser = service.save(user);
+
+        // users/4 => /users/{id},  user.getID
+
+        URI location= ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(savedUser.getId())
+                .toUri(); // Returning the Location of where the new post request created a user
+
+        return ResponseEntity.created(location).build();
+
     }
 
 
